@@ -53,7 +53,7 @@ public class ZonaFitApplication implements CommandLineRunner {
 				2. Buscar Cliente
 				3. Añadir Cliente
 				4. Modificar Cliente
-				5. Eliminar Clinete
+				5. Eliminar Cliente
 				6. Salir
 				Seleccione una opción:\s""");
 		return entrada.nextInt();
@@ -78,6 +78,63 @@ public class ZonaFitApplication implements CommandLineRunner {
 					logger.info("Cliente NO encontrado: " + cliente + nl);
 				}
 			}
+			case 3 -> {
+				logger.info(nl + "--- Añadir Cliente ---" + nl);
+				entrada.nextLine();
+				logger.info("Introduce el nombre: ");
+				String nombre = entrada.nextLine();
+				logger.info("Introduce el apellido: ");
+				String apellido = entrada.nextLine();
+				logger.info("Introduce el número de membresía: ");
+				int membresia = entrada.nextInt();
+				Cliente nuevoCliente = new Cliente();
+				nuevoCliente.setNombre(nombre);
+				nuevoCliente.setApellido(apellido);
+				nuevoCliente.setMembresia(membresia);
+				clienteServicio.guardarCliente(nuevoCliente);
+				logger.info("Cliente añadido correctamente: " + nuevoCliente + nl);
+			}
+			case 4 -> {
+				logger.info(nl + "--- Modificar Cliente ---" + nl);
+				logger.info("Introduce el id del cliente que deseas modificar: ");
+				int idModifica = entrada.nextInt();
+				Cliente cliente = clienteServicio.buscarClientePorId(idModifica);
+				if (cliente != null){
+					entrada.nextLine();
+					logger.info("Nombre modificado (o el mismo si no lo desea modificar): ");
+					String nombre = entrada.nextLine();
+					logger.info("Apellido modificado (o el mismo si no lo desea momdificar): ");
+					String apellido = entrada.nextLine();
+					logger.info("Membresía modificada (o la misma si no lo desea modificar): ");
+					int membresia = entrada.nextInt();
+					cliente.setNombre(nombre);
+					cliente.setApellido(apellido);
+					cliente.setMembresia(membresia);
+					clienteServicio.guardarCliente(cliente);
+					logger.info("Cliente modificado correctamente: " + cliente + nl);
+				} else {
+					logger.info("Cliente no encontrado");
+				}
+			}
+			case 5 -> {
+				logger.info(nl + "--- Eliminar Cliente ---" + nl);
+				List<Cliente> clientes = clienteServicio.listarClientes();
+				clientes.forEach(cliente -> logger.info("{}{}", cliente, nl));
+				logger.info("Introduce el id del cliente que deseas eliminar: ");
+				int idEliminar = entrada.nextInt();
+				Cliente clienteEliminar = clienteServicio.buscarClientePorId(idEliminar);
+				if (clienteEliminar != null){
+					clienteServicio.eliminarCliente(clienteEliminar);
+					logger.info("Cliente eliminado: " + clienteEliminar);
+				} else {
+					logger.info("Cliente no encontrado " + clienteEliminar);
+				}
+			}
+			case 6 -> {
+				logger.info("*** Hasta pronto ***" + nl + nl);
+				salir = true;
+			}
+			default -> logger.info("Opción inválida: " + opcion + nl);
 		}
 		return salir;
 	}

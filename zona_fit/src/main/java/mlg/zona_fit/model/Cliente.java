@@ -1,4 +1,4 @@
-package mlg.zona_fit.modelo;
+package mlg.zona_fit.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

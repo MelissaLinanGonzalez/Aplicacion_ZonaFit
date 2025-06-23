@@ -1,5 +1,6 @@
 package mlg.zona_fit.gui;
 
+import mlg.zona_fit.model.Cliente;
 import mlg.zona_fit.service.ClienteServicio;
 import mlg.zona_fit.service.IClienteServicio;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,8 @@ import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 @Component
 public class ZonaFitForma extends JFrame{
@@ -25,6 +28,7 @@ public class ZonaFitForma extends JFrame{
     public ZonaFitForma(ClienteServicio clienteServicio){
         this.clienteServicio = clienteServicio;
         iniciarForma();
+        guardarButton.addActionListener(e -> guardarCliente());
     }
 
     private void iniciarForma(){
@@ -34,7 +38,6 @@ public class ZonaFitForma extends JFrame{
         setLocationRelativeTo(null); // Centra la ventana
     }
 
-
     private void createUIComponents() {
         // TODO: place custom component creation code here
         this.tablaModeloClientes = new DefaultTableModel(0, 4);
@@ -43,6 +46,42 @@ public class ZonaFitForma extends JFrame{
         this.clientesTabla = new JTable(tablaModeloClientes);
         // Cargar listado de clientes
         listarClientes();
+    }
+
+    private void guardarCliente(){
+        if (nombreTexto.getText().equals("")){
+            mostrarMensaje("Proporciona un nombre");
+            nombreTexto.requestFocusInWindow();
+            return;
+        }
+        if (membresiaTexto.getText().equals("")){
+            mostrarMensaje("Proporciona una membresía");
+            membresiaTexto.requestFocusInWindow();
+            return;
+        }
+
+        // Recuperamos los valores del formulario
+        var nombre = nombreTexto.getText();
+        var apellido = apellidoTexto.getText();
+        var membresia = Integer.parseInt(membresiaTexto.getText());
+        var cliente = new Cliente();
+        cliente.setNombre(nombre);
+        cliente.setApellido(apellido);
+        cliente.setMembresia(membresia);
+        this.clienteServicio.guardarCliente(cliente); //Se inserta el nuevo objeto tipo cliente en la bbdd
+
+        limpiarFormulario();
+        listarClientes();
+    }
+
+    private void limpiarFormulario(){
+        nombreTexto.setText("");
+        apellidoTexto.setText("");
+        membresiaTexto.setText("");
+    }
+
+    private void mostrarMensaje(String mensaje){
+        JOptionPane.showMessageDialog(this, mensaje);
     }
 
     private void listarClientes(){

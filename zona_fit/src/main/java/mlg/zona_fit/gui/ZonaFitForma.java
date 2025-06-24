@@ -70,12 +70,12 @@ public class ZonaFitForma extends JFrame{
     }
 
     private void guardarCliente(){
-        if (nombreTexto.getText().equals("")){
+        if (nombreTexto.getText().isEmpty()){
             mostrarMensaje("Proporciona un nombre");
             nombreTexto.requestFocusInWindow();
             return;
         }
-        if (membresiaTexto.getText().equals("")){
+        if (membresiaTexto.getText().isEmpty()){
             mostrarMensaje("Proporciona una membresía");
             membresiaTexto.requestFocusInWindow();
             return;
